@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     private ProgressBar mProgressBar;
-    RecyclerView mRecyclerView;
+    ListView mRecyclerView;
 
     List<Flower> mFlowers;
 
@@ -38,14 +39,11 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.INVISIBLE);
         mFlowers = new ArrayList<>();
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = (ListView) findViewById(R.id.recyclerView);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
 
-        FlowerAdapter adapter = new FlowerAdapter(mFlowers);
-        mRecyclerView.setAdapter(adapter);
+
 
 
         FlowersAPI flowersAPI = FlowersAPI.retrofit.create(FlowersAPI.class);
@@ -56,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Flower>> call, Response<List<Flower>> response) {
                 if (response.isSuccessful()){
                     mFlowers.addAll(response.body());
-                    mRecyclerView.getAdapter().notifyDataSetChanged();
+                    FlowerAdapter adapter = new FlowerAdapter(MainActivity.this, mFlowers);
+                    mRecyclerView.setAdapter(adapter);
                     mProgressBar.setVisibility(View.INVISIBLE);
                 } else {
                     // Обрабатываем ошибку

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,52 +14,50 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-class FlowerAdapter extends RecyclerView.Adapter<FlowerAdapter.ViewHolder> {
+class FlowerAdapter extends ArrayAdapter<Flower> {
     private final static String PHOTO_URL = "http://services.hanselandpetal.com/photos/";
     private List<Flower> mFlowers;
     private Context mContext;
 
-    FlowerAdapter(List<Flower> flowers) {
-
-        this.mFlowers = flowers;
+    public FlowerAdapter(Context context, List<Flower> flowerNAmes) {
+        super(context, R.layout.item_flower, flowerNAmes);
+        this.mFlowers = flowerNAmes;
+        this.mContext = context;
     }
 
+
+
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         mContext = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_main, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.item_flower, parent, false);
+        TextView nameTextView = (TextView) view.findViewById(R.id.flowername);
+        TextView descripTextView = (TextView) view.findViewById(R.id.flowerdescrip);
+        nameTextView.setText(this.mFlowers.get(position).getName());
+        descripTextView.setText(this.mFlowers.get(position).getInstructions());
+
+        return view;
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Flower flower = mFlowers.get(position);
-        holder.nameTextView.setText(flower.getName());
+//    @Override
+//    public void onBindViewHolder(ViewHolder holder, int position) {
+//        Flower flower = mFlowers.get(position);
+//        holder.nameTextView.setText(flower.getName());
+//
+////        Picasso.with(mContext)
+////                .load(PHOTO_URL + flower.getPhoto())
+////                .resize(200, 150)
+////                .into(holder.flowerImageView);
+//
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        if (mFlowers == null) {
+//            return 0;
+//        }
+//        return mFlowers.size();
+//    }
 
-        Picasso.with(mContext)
-                .load(PHOTO_URL + flower.getPhoto())
-                .resize(200, 150)
-                .into(holder.flowerImageView);
-
-    }
-
-    @Override
-    public int getItemCount() {
-        if (mFlowers == null) {
-            return 0;
-        }
-        return mFlowers.size();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView;
-        ImageView flowerImageView;
-
-        ViewHolder(View itemView) {
-            super(itemView);
-            nameTextView = (TextView) itemView.findViewById(R.id.nameTextView);
-            flowerImageView = (ImageView) itemView.findViewById(R.id.itemImageView);
-        }
-    }
 }
