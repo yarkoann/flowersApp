@@ -1,6 +1,7 @@
 package com.example.testapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,18 @@ class FlowerAdapter extends ArrayAdapter<Flower> {
         mContext = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_flower, parent, false);
+
+        ImageView flowerimg = (ImageView) view.findViewById(R.id.imageView);
         TextView nameTextView = (TextView) view.findViewById(R.id.flowername);
         TextView descripTextView = (TextView) view.findViewById(R.id.flowerdescrip);
+
+        Log.d("GIT", ""+"https://services.hanselandpetal.com/photos/" + this.mFlowers.get(position).getPhoto());
+        Picasso
+                .with(view.getContext())
+                .load("https://services.hanselandpetal.com/photos/" + this.mFlowers.get(position).getPhoto())
+                .into(flowerimg);
+        ;
+
         nameTextView.setText(this.mFlowers.get(position).getName());
         descripTextView.setText(this.mFlowers.get(position).getInstructions());
 

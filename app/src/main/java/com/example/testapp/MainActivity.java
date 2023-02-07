@@ -43,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.VISIBLE);
 
 
-
-
-
         FlowersAPI flowersAPI = FlowersAPI.retrofit.create(FlowersAPI.class);
         final Call<List<Flower>> call = flowersAPI.getData();
 
